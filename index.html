@@ -387,6 +387,36 @@ html[lang="hy"] .package-rule p{
   html[lang="hy"] .scope-grid{grid-template-columns:1fr}
 }
 
+
+/* English: use wider card columns to avoid awkward overflow in package/scope tables */
+html[lang="en"] .pack-grid,
+html[lang="en"] .scope-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+html[lang="en"] .pack,
+html[lang="en"] .pack-top,
+html[lang="en"] .scope-card{
+  min-width:0;
+  overflow:visible;
+}
+html[lang="en"] .pack h3,
+html[lang="en"] .pack-desc,
+html[lang="en"] .pack li,
+html[lang="en"] .pack details p,
+html[lang="en"] .scope-card h3,
+html[lang="en"] .scope-card p,
+html[lang="en"] .stage-price,
+html[lang="en"] .package-rule p{
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+@media(max-width:760px){
+  html[lang="en"] .pack-grid,
+  html[lang="en"] .scope-grid{
+    grid-template-columns:1fr;
+  }
+}
+
 </style>
 </head>
 <body>
