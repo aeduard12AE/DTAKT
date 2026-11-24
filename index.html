@@ -932,7 +932,7 @@ textarea{min-height:100px;resize:vertical}
         sitekey: siteKey, action:'contact', appearance:'interaction-only', size:'flexible', theme:'light',
         callback: value => { token = value; },
         'expired-callback': () => { token = ''; },
-        'error-callback': () => { token = ''; }
+        'error-callback': code => { token = ''; console.warn('[D-TAKT] Turnstile error:', code); }
       });
       scriptFailed = false;
     } catch (_) { scriptFailed = true; }
@@ -943,9 +943,10 @@ textarea{min-height:100px;resize:vertical}
     scriptFailed = false;
     const script = document.createElement('script');
     script.id = 'dtakt-turnstile-script';
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    // Turnstile calls this only once its API is initialized.
+    window.dtaktTurnstileLoaded = initTurnstile;
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=dtaktTurnstileLoaded';
     script.async = true;
-    script.onload = () => window.turnstile ? window.turnstile.ready(initTurnstile) : (scriptFailed = true);
     script.onerror = () => { scriptFailed = true; script.remove(); };
     document.head.appendChild(script);
   }
