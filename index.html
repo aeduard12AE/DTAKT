@@ -623,9 +623,16 @@ textarea{min-height:100px;resize:vertical}
 <dd><a href="mailto:contact@d-takt.org">contact@d-takt.org</a></dd>
 </dl>
 </div>
-<!-- GitHub Pages: AJAX-заявки через FormSubmit. После первой тестовой отправки необходимо подтвердить адрес получателя. -->
-<form action="https://formsubmit.co/ajax/contact@d-takt.org" class="form-panel" id="request-form" method="POST">
+<!-- FormSubmit: стандартная POST-форма с reCAPTCHA и автоответом. -->
+<form action="https://formsubmit.co/contact@d-takt.org" class="form-panel" id="request-form" method="POST">
 <input type="text" name="_honey" class="honey-field" tabindex="-1" autocomplete="off" aria-hidden="true"/>
+<input type="hidden" name="_next" value="https://d-takt.org/?request=sent#zayavka"/>
+<input type="hidden" name="_subject" value="Заявка с сайта D-TAKT"/>
+<input type="hidden" name="_autoresponse" value="Спасибо за обращение в D-TAKT!&#10;&#10;Ваша заявка получена. Мы свяжемся с вами по указанному email.&#10;&#10;D-TAKT"/>
+<input type="hidden" name="region" value="Россия"/>
+<input type="hidden" name="language" value="ru"/>
+<input type="hidden" name="privacy_consent" value="Accepted D-TAKT policy (revision 2026-11-24)"/>
+<input type="hidden" name="submitted_at" value=""/>
 
 <fieldset class="form-section">
 <div class="form-section-head"><span class="form-section-num">01</span><span class="form-section-title">Контакты</span></div>
@@ -644,7 +651,7 @@ textarea{min-height:100px;resize:vertical}
 <div class="form-section-head"><span class="form-section-num">02</span><span class="form-section-title">Коротко об объекте</span></div>
 <div>
 <label for="object">Какой у вас объект?</label>
-<input id="object" name="object" placeholder="Например, квартира 85 м², Ереван" required type="text"/>
+<input id="object" name="property" placeholder="Например, квартира 85 м², Ереван" required type="text"/>
 </div>
 <div style="margin-top:17px">
 <label for="msg">Что хотите автоматизировать?</label>
@@ -685,25 +692,25 @@ textarea{min-height:100px;resize:vertical}
 <div class="privacy-language" lang="ru" data-privacy-lang="ru" hidden><section class="privacy-part"><h3>Оператор</h3><p>Оператор данных — <strong>ИП Эдуард Евгеньевич Арчибасов</strong>, Республика Армения. Торговое наименование: <strong>D-TAKT</strong>. ИНН (ՀՎՀՀ): <strong>28970807</strong>. Номер госрегистрации: <strong>286.1628548</strong>. Место государственной регистрации: Ванадзор, Лорийская область, Армения. Для обращений: <a href="mailto:contact@d-takt.org">contact@d-takt.org</a>.</p></section>
 <section class="privacy-part"><h3>Какие сведения собираем</h3><p>При отправке заявки мы получаем ваше имя, адрес электронной почты, описание объекта и сведения, которые вы добровольно указываете в комментарии. Технические сведения, необходимые для работы и защиты сайта, могут обрабатываться его хостингом и сервисом формы.</p></section>
 <section class="privacy-part"><h3>Цель и основание</h3><p>Данные используются только для рассмотрения заявки, ответа на неё и дальнейшего общения по вашему запросу. Основание — ваше добровольное согласие при отправке формы. Данные не используются для рекламных рассылок без отдельного согласия.</p></section>
-<section class="privacy-part"><h3>Передача и хранение</h3><p>Заявка передаётся через сервис FormSubmit.co, а затем поступает в почтовый ящик D-TAKT на Spacemail. Хостинг GitHub Pages и подключённые технические сервисы также могут обрабатывать необходимые служебные сведения. Обработка, в том числе у поставщиков услуг, может происходить за пределами Армении. По информации FormSubmit, копии отправок сохраняются до 30 дней; D-TAKT хранит переписку не дольше необходимого для работы с обращением, если иной срок не требуется законом.</p></section>
+<section class="privacy-part"><h3>Передача и хранение</h3><p>Заявка передаётся через сервис FormSubmit.co, а затем поступает в почтовый ящик D-TAKT на Spacemail. FormSubmit направляет подтверждение с копией заявки на указанный email и использует Google reCAPTCHA для защиты от спама. Хостинг GitHub Pages и подключённые технические сервисы также могут обрабатывать необходимые служебные сведения. Обработка, в том числе у поставщиков услуг, может происходить за пределами Армении. По информации FormSubmit, копии отправок сохраняются до 30 дней; D-TAKT хранит переписку не дольше необходимого для работы с обращением, если иной срок не требуется законом.</p></section>
 <section class="privacy-part"><h3>Ваши права</h3><p>Вы можете запросить сведения об обработке, исправление или удаление данных, а также отозвать согласие, написав на <a href="mailto:contact@d-takt.org">contact@d-takt.org</a>. После отзыва обработка прекращается, кроме случаев, когда её продолжение предусмотрено законом. Без имени и email мы не сможем ответить на заявку.</p></section>
 <section class="privacy-part"><h3>Дата обновления</h3><p>21 ноября 2026 года.</p></section></div>
 <div class="privacy-language" lang="en" data-privacy-lang="en" hidden><section class="privacy-part"><h3>Data controller</h3><p>Data controller: <strong>sole proprietor Eduard Archibasov</strong>, Republic of Armenia. Trading name: <strong>D-TAKT</strong>. TIN: <strong>28970807</strong>. State registration No.: <strong>286.1628548</strong>. Place of registration: Vanadzor, Lori Province, Armenia. For privacy enquiries: <a href="mailto:contact@d-takt.org">contact@d-takt.org</a>.</p></section>
 <section class="privacy-part"><h3>Data we collect</h3><p>When you send an enquiry, we collect your name, email address, description of the property and any details you provide voluntarily. Hosting and form services may process necessary technical and security information.</p></section>
 <section class="privacy-part"><h3>Purpose and legal basis</h3><p>We use this information only to review and respond to your enquiry and to communicate about the work you requested. Our basis is your voluntary consent when submitting the form. We do not use these details for marketing without separate consent.</p></section>
-<section class="privacy-part"><h3>Processing and retention</h3><p>The form is processed by FormSubmit.co and delivered to the D-TAKT mailbox hosted by Spacemail. GitHub Pages and other technical providers may process necessary service information. Processing may take place outside Armenia. FormSubmit states that form submissions are retained for up to 30 days. D-TAKT keeps correspondence only as long as needed for the enquiry, unless the law requires longer retention.</p></section>
+<section class="privacy-part"><h3>Processing and retention</h3><p>The form is processed by FormSubmit.co and delivered to the D-TAKT mailbox hosted by Spacemail. FormSubmit sends a confirmation with a copy of the enquiry to the supplied email address and uses Google reCAPTCHA for spam protection. GitHub Pages and other technical providers may process necessary service information. Processing may take place outside Armenia. FormSubmit states that form submissions are retained for up to 30 days. D-TAKT keeps correspondence only as long as needed for the enquiry, unless the law requires longer retention.</p></section>
 <section class="privacy-part"><h3>Your rights</h3><p>You can request access, correction or deletion of your data or withdraw consent at <a href="mailto:contact@d-takt.org">contact@d-takt.org</a>. Processing will stop upon withdrawal unless the law requires otherwise. Without a name and email address we cannot reply.</p></section>
 <section class="privacy-part"><h3>Last updated</h3><p>21 November 2026.</p></section></div>
 <div class="privacy-language" lang="hy" data-privacy-lang="hy" hidden><section class="privacy-part"><h3>Տվյալների մշակողը</h3><p>Տվյալների մշակող՝ <strong>ԱՁ ԱՐՉԻԲԱՍՈՎ ԷԴՈՒԱՐԴ ԵՎԳԵՆԻԻ</strong>, Հայաստանի Հանրապետություն։ Առևտրային անվանում՝ <strong>D-TAKT</strong>։ ՀՎՀՀ՝ <strong>28970807</strong>։ Պետական գրանցման համար՝ <strong>286.1628548</strong>։ Գրանցման վայր՝ Լոռու մարզ, Վանաձոր, Հայաստան։ Տվյալների մշակման վերաբերյալ հարցումների համար՝ <a href="mailto:contact@d-takt.org">contact@d-takt.org</a>։</p></section>
 <section class="privacy-part"><h3>Հավաքագրվող տվյալները</h3><p>Հարցում ուղարկելիս մենք ստանում ենք ձեր անունը, էլեկտրոնային հասցեն, տարածքի նկարագրությունը և մեկնաբանությունում կամավոր տրամադրած տեղեկությունները։ Հոսթինգի և ձևի ծառայությունները կարող են մշակել անհրաժեշտ տեխնիկական և անվտանգության տվյալներ։</p></section>
 <section class="privacy-part"><h3>Նպատակը և հիմքը</h3><p>Տվյալներն օգտագործվում են միայն ձեր հարցումը դիտարկելու, պատասխանելու և ձեր պահանջած աշխատանքների վերաբերյալ հաղորդակցվելու համար՝ ձևն ուղարկելիս տրված համաձայնության հիման վրա։ Առանց առանձին համաձայնության դրանք չեն օգտագործվում գովազդային հաղորդագրությունների համար։</p></section>
-<section class="privacy-part"><h3>Փոխանցում և պահպանում</h3><p>Հարցումը մշակվում է FormSubmit.co ծառայության միջոցով և փոխանցվում է D-TAKT-ի Spacemail փոստարկղ։ GitHub Pages-ը և տեխնիկական այլ ծառայություններ կարող են մշակել անհրաժեշտ ծառայողական տվյալներ։ Մշակումը կարող է կատարվել Հայաստանի սահմաններից դուրս։ FormSubmit-ը հայտնում է, որ հարցումների պատճենները պահպանվում են մինչև 30 օր։ D-TAKT-ը նամակագրությունը պահպանում է միայն անհրաժեշտ ժամկետով, եթե օրենքով այլ ժամկետ սահմանված չէ։</p></section>
+<section class="privacy-part"><h3>Փոխանցում և պահպանում</h3><p>Հարցումը մշակվում է FormSubmit.co ծառայության միջոցով և փոխանցվում է D-TAKT-ի Spacemail փոստարկղ։ FormSubmit-ը նշված էլեկտրոնային հասցեին ուղարկում է հաստատում՝ հարցման պատճենով, և սպամից պաշտպանվելու համար օգտագործում է Google reCAPTCHA։ GitHub Pages-ը և տեխնիկական այլ ծառայություններ կարող են մշակել անհրաժեշտ ծառայողական տվյալներ։ Մշակումը կարող է կատարվել Հայաստանի սահմաններից դուրս։ FormSubmit-ը հայտնում է, որ հարցումների պատճենները պահպանվում են մինչև 30 օր։ D-TAKT-ը նամակագրությունը պահպանում է միայն անհրաժեշտ ժամկետով, եթե օրենքով այլ ժամկետ սահմանված չէ։</p></section>
 <section class="privacy-part"><h3>Ձեր իրավունքները</h3><p>Կարող եք պահանջել տվյալների տրամադրում, ուղղում կամ ջնջում, ինչպես նաև հետ կանչել համաձայնությունը՝ գրելով <a href="mailto:contact@d-takt.org">contact@d-takt.org</a> հասցեին։ Համաձայնությունը հետ կանչելուց հետո մշակումը դադարեցվում է, եթե օրենքով այլ բան նախատեսված չէ։ Առանց անվան և էլեկտրոնային հասցեի հնարավոր չէ պատասխանել հարցմանը։</p></section>
 <section class="privacy-part"><h3>Թարմացվել է</h3><p>21 նոյեմբերի 2026 թ․։</p></section></div>
 <div class="privacy-language" lang="de" data-privacy-lang="de" hidden><section class="privacy-part"><h3>Verantwortliche Stelle</h3><p>Verantwortlicher: <strong>Einzelunternehmer Eduard Archibasov</strong>, Republik Armenien. Geschäftsbezeichnung: <strong>D-TAKT</strong>. Steuernummer: <strong>28970807</strong>. Staatliche Registrierungsnummer: <strong>286.1628548</strong>. Registrierungsort: Wanadsor, Provinz Lori, Armenien. Für Datenschutzanfragen: <a href="mailto:contact@d-takt.org">contact@d-takt.org</a>.</p></section>
 <section class="privacy-part"><h3>Welche Daten erfasst werden</h3><p>Mit Ihrer Anfrage übermitteln Sie Ihren Namen, Ihre E-Mail-Adresse, Angaben zum Objekt und freiwillige Angaben im Freitextfeld. Hosting- und Formulardienste können erforderliche technische und sicherheitsrelevante Daten verarbeiten.</p></section>
 <section class="privacy-part"><h3>Zweck und Rechtsgrundlage</h3><p>Wir verwenden Ihre Daten ausschließlich zur Bearbeitung und Beantwortung Ihrer Anfrage und zur Kommunikation über die angefragten Leistungen. Grundlage ist Ihre freiwillige Einwilligung beim Absenden. Eine werbliche Nutzung erfolgt nicht ohne gesonderte Einwilligung.</p></section>
-<section class="privacy-part"><h3>Übermittlung und Speicherung</h3><p>Die Anfrage wird über FormSubmit.co verarbeitet und an das D-TAKT-Postfach bei Spacemail übermittelt. GitHub Pages und weitere technische Dienstleister können notwendige Betriebsdaten verarbeiten. Eine Verarbeitung außerhalb Armeniens ist möglich. FormSubmit gibt eine Aufbewahrungsdauer von bis zu 30 Tagen an. D-TAKT speichert die Korrespondenz nur so lange, wie für die Anfrage erforderlich, soweit gesetzlich nichts anderes gilt.</p></section>
+<section class="privacy-part"><h3>Übermittlung und Speicherung</h3><p>Die Anfrage wird über FormSubmit.co verarbeitet und an das D-TAKT-Postfach bei Spacemail übermittelt. FormSubmit sendet eine Bestätigung mit einer Kopie der Anfrage an die angegebene E-Mail-Adresse und verwendet Google reCAPTCHA zum Schutz vor Spam. GitHub Pages und weitere technische Dienstleister können notwendige Betriebsdaten verarbeiten. Eine Verarbeitung außerhalb Armeniens ist möglich. FormSubmit gibt eine Aufbewahrungsdauer von bis zu 30 Tagen an. D-TAKT speichert die Korrespondenz nur so lange, wie für die Anfrage erforderlich, soweit gesetzlich nichts anderes gilt.</p></section>
 <section class="privacy-part"><h3>Ihre Rechte</h3><p>Sie können Auskunft, Berichtigung und Löschung verlangen oder Ihre Einwilligung unter <a href="mailto:contact@d-takt.org">contact@d-takt.org</a> widerrufen. Nach einem Widerruf endet die Verarbeitung, soweit gesetzlich nichts anderes vorgeschrieben ist. Ohne Namen und E-Mail-Adresse können wir nicht antworten.</p></section>
 <section class="privacy-part"><h3>Stand</h3><p>21. November 2026.</p></section></div>
     </div>
@@ -894,18 +901,26 @@ textarea{min-height:100px;resize:vertical}
   const requestDialog = document.getElementById('request-dialog');
   const requestConfirm = document.getElementById('request-confirm');
   const formMessages = {
-    ru:{sending:'Отправляется…',waiting:'Ожидаем подтверждение…',title:'Отправлено',success:'Спасибо! Ваша заявка принята. Мы ответим на указанный email.',error:'Не удалось подтвердить отправку. Попробуйте позже или напишите нам на contact@d-takt.org.',timeout:'Заявка могла быть доставлена, но подтверждение от сервиса не получено. Не отправляйте её повторно сразу. Если ответа не будет, напишите нам на contact@d-takt.org.',activation:'Форма пока не активирована владельцем сайта. Можно написать напрямую: contact@d-takt.org.',required:'Пожалуйста, укажите действительный email.',send:'Отправить заявку',confirm:'OK'},
-    en:{sending:'Sending…',waiting:'Awaiting confirmation…',title:'Sent',success:'Thank you! Your enquiry has been accepted. We will reply by email.',error:'Submission could not be confirmed. Please try later or email contact@d-takt.org.',timeout:'Your enquiry may have been delivered, but the service has not confirmed it. Please do not submit it again immediately. If you receive no reply, email contact@d-takt.org.',activation:'This form has not been activated yet. Please email contact@d-takt.org directly.',required:'Please enter a valid email address.',send:'Send request',confirm:'OK'},
-    hy:{sending:'Ուղարկվում է…',waiting:'Սպասում ենք հաստատման…',title:'Ուղարկված է',success:'Շնորհակալություն։ Ձեր հարցումն ընդունվել է։ Կպատասխանենք նշված էլեկտրոնային հասցեով։',error:'Չհաջողվեց հաստատել հարցման ուղարկումը։ Փորձեք ավելի ուշ կամ գրեք contact@d-takt.org հասցեին։',timeout:'Ձեր հարցումը հնարավոր է՝ առաքվել է, սակայն ծառայությունը չի հաստատել ուղարկումը։ Մի ուղարկեք այն անմիջապես կրկին։ Եթե պատասխան չստանաք, գրեք contact@d-takt.org հասցեին։',activation:'Ձևը դեռ ակտիվացված չէ։ Գրեք անմիջապես contact@d-takt.org հասցեին։',required:'Նշեք վավեր էլեկտրոնային հասցե։',send:'Ուղարկել հարցում',confirm:'Լավ'},
-    de:{sending:'Wird gesendet…',waiting:'Warten auf Bestätigung…',title:'Gesendet',success:'Vielen Dank! Ihre Anfrage wurde angenommen. Wir antworten per E-Mail.',error:'Der Versand konnte nicht bestätigt werden. Versuchen Sie es später erneut oder schreiben Sie an contact@d-takt.org.',timeout:'Ihre Anfrage wurde möglicherweise zugestellt, aber der Dienst hat den Versand nicht bestätigt. Bitte senden Sie sie nicht sofort erneut. Falls Sie keine Antwort erhalten, schreiben Sie an contact@d-takt.org.',activation:'Das Formular ist noch nicht aktiviert. Schreiben Sie bitte direkt an contact@d-takt.org.',required:'Bitte geben Sie eine gültige E-Mail-Adresse ein.',send:'Anfrage senden',confirm:'OK'}
+    ru:{sending:'Отправляется…',title:'Отправлено',success:'Спасибо! Ваша заявка принята. Мы ответим на указанный email.',send:'Отправить заявку',confirm:'OK'},
+    en:{sending:'Sending…',title:'Sent',success:'Thank you! Your enquiry has been accepted. We will reply by email.',send:'Send request',confirm:'OK'},
+    hy:{sending:'Ուղարկվում է…',title:'Ուղարկված է',success:'Շնորհակալություն։ Ձեր հարցումն ընդունվել է։ Կպատասխանենք նշված էլեկտրոնային հասցեով։',send:'Ուղարկել հարցում',confirm:'Լավ'},
+    de:{sending:'Wird gesendet…',title:'Gesendet',success:'Vielen Dank! Ihre Anfrage wurde angenommen. Wir antworten per E-Mail.',send:'Anfrage senden',confirm:'OK'}
+  };
+  const autoReplies = {
+    ru:'Спасибо за обращение в D-TAKT!\n\nВаша заявка получена. Мы свяжемся с вами по указанному email.\n\nD-TAKT',
+    en:'Thank you for contacting D-TAKT!\n\nWe have received your enquiry and will contact you at the email address provided.\n\nD-TAKT',
+    hy:'Շնորհակալություն D-TAKT-ին դիմելու համար։\n\nՁեր հարցումը ստացվել է։ Մենք կկապվենք ձեզ հետ նշված էլեկտրոնային հասցեով։\n\nD-TAKT',
+    de:'Vielen Dank für Ihre Anfrage an D-TAKT!\n\nWir haben Ihre Anfrage erhalten und melden uns unter der angegebenen E-Mail-Adresse bei Ihnen.\n\nD-TAKT'
+  };
+  const subjects = {
+    ru:'Заявка с сайта D-TAKT', en:'D-TAKT website enquiry', hy:'Հարցում D-TAKT կայքից', de:'Anfrage über die D-TAKT-Website'
   };
   let sending = false;
-  let waitingForConfirmation = false;
   let requestState = '';
   function renderRequestUI() {
     const messages = formMessages[currentLang];
     requestSubmit.disabled = sending;
-    requestSubmit.textContent = sending ? (waitingForConfirmation ? messages.waiting : messages.sending) : messages.send;
+    requestSubmit.textContent = sending ? messages.sending : messages.send;
     formStatus.className = 'form-status' + (requestState === 'success' ? ' success' : requestState ? ' error' : '');
     formStatus.textContent = requestState ? messages[requestState] : '';
     document.getElementById('request-dialog-title').textContent = messages.title;
@@ -914,68 +929,46 @@ textarea{min-height:100px;resize:vertical}
   }
   requestConfirm.addEventListener('click', () => requestDialog.close());
   requestDialog.addEventListener('close', () => requestSubmit.focus({preventScroll:true}));
-  if (requestForm) requestForm.addEventListener('submit', async event => {
-    event.preventDefault();
-    if (sending || !requestForm.reportValidity()) return;
-    const f = new FormData(requestForm);
-    const email = String(f.get('email') || '').trim();
-    const emailField = requestForm.querySelector('#email');
-    if (!email || !emailField.checkValidity()) {
-      emailField.setCustomValidity(formMessages[currentLang].required);
-      emailField.reportValidity();
-      return;
-    }
-    const template = {
-      ru:'Заявка с сайта D-TAKT',en:'D-TAKT website enquiry',hy:'Հարցում D-TAKT կայքից',de:'Anfrage über die D-TAKT-Website'
-    };
-    const data = {
-      name: String(f.get('name') || '').trim(),
-      email,
-      property: String(f.get('object') || '').trim(),
-      region: regionNames[currentLang][currentRegion],
-      message: String(f.get('message') || '').trim() || '—',
-      language: currentLang,
-      privacy_consent: 'Accepted D-TAKT policy (revision 2026-11-21)',
-      submitted_at: new Date().toISOString(),
-      _subject: template[currentLang],
-      _honey: String(f.get('_honey') || ''),
-      _captcha: 'false'
-    };
+  if (requestForm) requestForm.addEventListener('submit', event => {
+    if (sending || !requestForm.reportValidity()) { event.preventDefault(); return; }
+    const field = name => requestForm.elements.namedItem(name);
+    field('name').value = field('name').value.trim();
+    field('email').value = field('email').value.trim();
+    field('property').value = field('property').value.trim();
+    if (!requestForm.reportValidity()) { event.preventDefault(); return; }
+    field('_subject').value = subjects[currentLang];
+    field('_autoresponse').value = autoReplies[currentLang];
+    field('language').value = currentLang;
+    field('region').value = regionNames[currentLang][currentRegion];
+    field('submitted_at').value = new Date().toISOString();
+    // Return to the same published page after FormSubmit confirms its native POST.
+    const returnUrl = new URL(location.protocol === 'https:' ? location.href : 'https://d-takt.org/');
+    returnUrl.search = '';
+    returnUrl.searchParams.set('request','sent');
+    returnUrl.searchParams.set('lang',currentLang);
+    returnUrl.searchParams.set('region',currentRegion);
+    returnUrl.hash = 'zayavka';
+    field('_next').value = returnUrl.href;
     sending = true;
     requestState = '';
     renderRequestUI();
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 60000);
-    const waitingTimer = setTimeout(() => { waitingForConfirmation = true; renderRequestUI(); }, 10000);
-    try {
-      const res = await fetch(requestForm.action, {
-        method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body:JSON.stringify(data),signal:controller.signal
-      });
-      const result = await res.json();
-      const reason = String(result && result.message || '').toLowerCase();
-      if (/activat/.test(reason) && /not activat|please activat|needs? to be activat|activation (email|link|required)|confirm your email/.test(reason)) {
-        throw new Error('activation');
-      }
-      if (!res.ok || !result || (result.success !== true && result.success !== 'true')) {
-        throw new Error(reason.includes('activat') ? 'activation' : 'submission');
-      }
-      requestState = 'success';
-      requestForm.reset();
-    } catch (err) {
-      requestState = controller.signal.aborted ? 'timeout' : err.message === 'activation' ? 'activation' : 'error';
-    } finally {
-      clearTimeout(timeout);
-      clearTimeout(waitingTimer);
-      waitingForConfirmation = false;
-      sending = false;
-      renderRequestUI();
-    }
-    if (requestState === 'success' && !requestDialog.open) requestDialog.showModal();
+    // Native form submission intentionally continues (no AJAX; CAPTCHA enabled).
   });
-  if (requestForm) requestForm.querySelector('#email').addEventListener('input', event => {
-    event.target.setCustomValidity('');
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) { sending = false; renderRequestUI(); }
   });
+  const returnedUrl = new URL(location.href);
+  if (returnedUrl.searchParams.get('request') === 'sent') {
+    const sentLang = returnedUrl.searchParams.get('lang');
+    const sentRegion = returnedUrl.searchParams.get('region');
+    if (supportedLangs.includes(sentLang)) currentLang = sentLang;
+    if (supportedRegions.includes(sentRegion)) currentRegion = sentRegion;
+    ['request','lang','region'].forEach(key => returnedUrl.searchParams.delete(key));
+    try { history.replaceState(null,'',returnedUrl.href); } catch (_) {}
+    requestState = 'success';
+    requestForm.reset();
+    requestDialog.showModal();
+  }
   // Keep modal language aligned if visitor switches language before opening it.
   document.querySelectorAll('.lang-btn').forEach(button => button.addEventListener('click', () => { renderPrivacy(); renderRequestUI(); }));
   renderPrivacy();
