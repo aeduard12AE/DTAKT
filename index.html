@@ -894,17 +894,18 @@ textarea{min-height:100px;resize:vertical}
   const requestDialog = document.getElementById('request-dialog');
   const requestConfirm = document.getElementById('request-confirm');
   const formMessages = {
-    ru:{sending:'Отправляется…',title:'Отправлено',success:'Спасибо! Ваша заявка принята. Мы ответим на указанный email.',error:'Не удалось подтвердить отправку. Попробуйте позже или напишите нам на contact@d-takt.org.',timeout:'Сервис не ответил вовремя. Отправка не подтверждена. Проверьте связь или напишите нам на contact@d-takt.org.',activation:'Форма пока не активирована владельцем сайта. Можно написать напрямую: contact@d-takt.org.',required:'Пожалуйста, укажите действительный email.',send:'Отправить заявку',confirm:'OK'},
-    en:{sending:'Sending…',title:'Sent',success:'Thank you! Your enquiry has been accepted. We will reply by email.',error:'Submission could not be confirmed. Please try later or email contact@d-takt.org.',timeout:'The service did not respond in time. Submission is unconfirmed. Check your connection or email contact@d-takt.org.',activation:'This form has not been activated yet. Please email contact@d-takt.org directly.',required:'Please enter a valid email address.',send:'Send request',confirm:'OK'},
-    hy:{sending:'Ուղարկվում է…',title:'Ուղարկված է',success:'Շնորհակալություն։ Ձեր հարցումն ընդունվել է։ Կպատասխանենք նշված էլեկտրոնային հասցեով։',error:'Չհաջողվեց հաստատել հարցման ուղարկումը։ Փորձեք ավելի ուշ կամ գրեք contact@d-takt.org հասցեին։',timeout:'Ծառայությունը ժամանակին չպատասխանեց։ Ուղարկումը հաստատված չէ։ Ստուգեք կապը կամ գրեք contact@d-takt.org հասցեին։',activation:'Ձևը դեռ ակտիվացված չէ։ Գրեք անմիջապես contact@d-takt.org հասցեին։',required:'Նշեք վավեր էլեկտրոնային հասցե։',send:'Ուղարկել հարցում',confirm:'Լավ'},
-    de:{sending:'Wird gesendet…',title:'Gesendet',success:'Vielen Dank! Ihre Anfrage wurde angenommen. Wir antworten per E-Mail.',error:'Der Versand konnte nicht bestätigt werden. Versuchen Sie es später erneut oder schreiben Sie an contact@d-takt.org.',timeout:'Der Dienst hat nicht rechtzeitig geantwortet. Der Versand ist nicht bestätigt. Prüfen Sie Ihre Verbindung oder schreiben Sie an contact@d-takt.org.',activation:'Das Formular ist noch nicht aktiviert. Schreiben Sie bitte direkt an contact@d-takt.org.',required:'Bitte geben Sie eine gültige E-Mail-Adresse ein.',send:'Anfrage senden',confirm:'OK'}
+    ru:{sending:'Отправляется…',waiting:'Ожидаем подтверждение…',title:'Отправлено',success:'Спасибо! Ваша заявка принята. Мы ответим на указанный email.',error:'Не удалось подтвердить отправку. Попробуйте позже или напишите нам на contact@d-takt.org.',timeout:'Заявка могла быть доставлена, но подтверждение от сервиса не получено. Не отправляйте её повторно сразу. Если ответа не будет, напишите нам на contact@d-takt.org.',activation:'Форма пока не активирована владельцем сайта. Можно написать напрямую: contact@d-takt.org.',required:'Пожалуйста, укажите действительный email.',send:'Отправить заявку',confirm:'OK'},
+    en:{sending:'Sending…',waiting:'Awaiting confirmation…',title:'Sent',success:'Thank you! Your enquiry has been accepted. We will reply by email.',error:'Submission could not be confirmed. Please try later or email contact@d-takt.org.',timeout:'Your enquiry may have been delivered, but the service has not confirmed it. Please do not submit it again immediately. If you receive no reply, email contact@d-takt.org.',activation:'This form has not been activated yet. Please email contact@d-takt.org directly.',required:'Please enter a valid email address.',send:'Send request',confirm:'OK'},
+    hy:{sending:'Ուղարկվում է…',waiting:'Սպասում ենք հաստատման…',title:'Ուղարկված է',success:'Շնորհակալություն։ Ձեր հարցումն ընդունվել է։ Կպատասխանենք նշված էլեկտրոնային հասցեով։',error:'Չհաջողվեց հաստատել հարցման ուղարկումը։ Փորձեք ավելի ուշ կամ գրեք contact@d-takt.org հասցեին։',timeout:'Ձեր հարցումը հնարավոր է՝ առաքվել է, սակայն ծառայությունը չի հաստատել ուղարկումը։ Մի ուղարկեք այն անմիջապես կրկին։ Եթե պատասխան չստանաք, գրեք contact@d-takt.org հասցեին։',activation:'Ձևը դեռ ակտիվացված չէ։ Գրեք անմիջապես contact@d-takt.org հասցեին։',required:'Նշեք վավեր էլեկտրոնային հասցե։',send:'Ուղարկել հարցում',confirm:'Լավ'},
+    de:{sending:'Wird gesendet…',waiting:'Warten auf Bestätigung…',title:'Gesendet',success:'Vielen Dank! Ihre Anfrage wurde angenommen. Wir antworten per E-Mail.',error:'Der Versand konnte nicht bestätigt werden. Versuchen Sie es später erneut oder schreiben Sie an contact@d-takt.org.',timeout:'Ihre Anfrage wurde möglicherweise zugestellt, aber der Dienst hat den Versand nicht bestätigt. Bitte senden Sie sie nicht sofort erneut. Falls Sie keine Antwort erhalten, schreiben Sie an contact@d-takt.org.',activation:'Das Formular ist noch nicht aktiviert. Schreiben Sie bitte direkt an contact@d-takt.org.',required:'Bitte geben Sie eine gültige E-Mail-Adresse ein.',send:'Anfrage senden',confirm:'OK'}
   };
   let sending = false;
+  let waitingForConfirmation = false;
   let requestState = '';
   function renderRequestUI() {
     const messages = formMessages[currentLang];
     requestSubmit.disabled = sending;
-    requestSubmit.textContent = sending ? messages.sending : messages.send;
+    requestSubmit.textContent = sending ? (waitingForConfirmation ? messages.waiting : messages.sending) : messages.send;
     formStatus.className = 'form-status' + (requestState === 'success' ? ' success' : requestState ? ' error' : '');
     formStatus.textContent = requestState ? messages[requestState] : '';
     document.getElementById('request-dialog-title').textContent = messages.title;
@@ -944,7 +945,8 @@ textarea{min-height:100px;resize:vertical}
     requestState = '';
     renderRequestUI();
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
+    const timeout = setTimeout(() => controller.abort(), 60000);
+    const waitingTimer = setTimeout(() => { waitingForConfirmation = true; renderRequestUI(); }, 10000);
     try {
       const res = await fetch(requestForm.action, {
         method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
@@ -964,6 +966,8 @@ textarea{min-height:100px;resize:vertical}
       requestState = controller.signal.aborted ? 'timeout' : err.message === 'activation' ? 'activation' : 'error';
     } finally {
       clearTimeout(timeout);
+      clearTimeout(waitingTimer);
+      waitingForConfirmation = false;
       sending = false;
       renderRequestUI();
     }
