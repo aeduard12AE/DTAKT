@@ -3,6 +3,20 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8"/>
+<!-- Google Tag Manager — D-TAKT -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    analytics_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied'
+  });
+  gtag('js', new Date());
+</script>
+<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-TSN9VT76"></script>
+<!-- End Google Tag Manager -->
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>D-TAKT — проектирование и интеграция систем KNX</title>
 <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFOklEQVR42q2Xy4scVRTGf+feW9M93enuyWQmUaMxGh9EJSq4cJGFC0WCiI+F2aghIrrwPxDMJkbBQEBEETduFEGE4EIFH4i4cikaNJr4jmOMMXFmnOnqqrrHxa2uqn7MZDJY9G2quuve+93vnPOdcyTLMqV/aXl7UZdqORAwAsasaarr38gaJ6x0SRUPoGkaAFl7AQBZhokiFl58leW33sFMdcD7CiEVVkQQ1fyXfEtrkcYkZnojbttW3A07iW67hWj7thxIFl4VWQFATnv648/0vvgCM7UJsnyS5mPM3AFjqYc0C8CtRTZNU7v9NhqPPUJ9z53hlTQda5bSBPUaMrkB02oG1KuRLSCFv0gOVotTaq9H94OPWX7/QxoP3EvnyCHM5tmxIMyAI3kPXvPhy2djwhAp6ZT82UhgQxXNchaMwXTa2I1TLL/zLn/d/SDZDz8hzhXmHWFgkNrKd5qi58+PWGKAAGuhXkPq9fIgWYYCZnaG9PgJ/t67n5kPjyLtFlphy40LqeL/JMVsmWXyiX0lxQUSDZ+4h5/7g+Sb70hPnERchDQbwY8ATRLMpml6X37N/IFDTL10OJhiBMCwBIiBXg93+WV0njuwugwAurBI/MlnzD9/hOzYt8hUB9I0YE1S7Mwmlt54m8ZjjxDduqvwh7HBL0Jp6zRF0wzf6+UjGRxJEhZrNZm8/x5mPzpKdMdu9J/5YJo+RBF0ucvS62/mBOqQE8p4ZVEAZ8G5fNjBYW1w0Mzj4xhpt9n4+suYSy9B4xjtx7/3SLNB/Onn+MXFsJYqK8ufH7aKri7VIhBFaBzjZmdoPrEPXVgEa4ookYkJ0l9PkRz7FhEB70sAgXEZUCwZIEbWpsnWoqrU9tyFtFuQZuVMY9Bul/Sb44UZzIryJuN988JJQVAR7PZt2K2XQi8pxKfPRPbLb6NCtIrqXjyS3N5mehqylGGW/d/nxihhvotW9WA9CESCvQHqNdTrKEPduLg3Y3N7P/NV9xVZV50wdpqwEgMSHHHd3JdJSb1H/10azYCqSKNR3JvBfTTodMUgsp6TG4Oe/wf/5xnERQWrmmdNu2XzKAP9RDfMiI5I5BocUJXk+Pdkc6chKgGIAtbgdmwv1jcDZR1BBzQ8DOmArs0aPrDWPfoeGsdgTQk+yzCtFu7GnWEpI1UGpJLuK3QUp5bV/UEVkgSpTZCc/JHlN9/GdtpInhURwS93cddfi7vmajSvG9xKVY9UhIM0DTl+rFDk6uksplYj++ss5/Y/hS4uIhs2oJkvi95ul/p9exDn0F4CzlYB6EjsC4BziHMXFGL/7xLLH33K/MEXSL87iWm3kMwHZTEGH/ewWy9j8uG9wcS5adygD+SOgqIeNIpIf/+D+WcPjwpT/qBxjD81R/LVMdLjJ5AowrRbeUWUw3YWPXOWDQefxm3ZjE+Solx3g8ethoIiUYQ//ScLBw+XBWcOUArpFrAGqdcw7Xb4r7+5AC4imztN8+GHaD65H5+mYOz4mlBGXC00FmZmpq+w4x1RCbT6vAwTCSdMUrK50zT2PkDnlSPBj4bivRIFJpzEGMTaUM30iw3VoOneD7RhUtgtd7L8fR/38GfOgjV0Dj3DxjdeC3lhjJaUPhB38UsLyMREnsFkKD2UlbJUM2gfSB/cxATuyiuo77mLxuOPEl23A18JxdHGpF+d7riK+u7dSKcd1Gyo9O7r0KAp8vBrNrGbZ7HXXIW7+SaiW3dh2y0UBhxubMD3u+P/qznt1xUkSd64rL5uAWD9rXmlPc+r36KLWsP1HwKmgg46zhXxAAAAAElFTkSuQmCC" rel="icon" sizes="32x32" type="image/png"/>
@@ -1177,6 +1191,12 @@ html[data-dtakt-view="partners"] #dtakt-partners,html[data-dtakt-view="portfolio
       const response = await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:controller.signal});
       const result = await response.json();
       if (response.ok && result.ok === true) {
+        // Report only a server-confirmed enquiry; never send form contents to Google.
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'd_takt_lead_success',
+          transaction_id: payload.requestId
+        });
         lastAttempt = null; requestForm.reset(); requestState = 'success';
         if (privacyDialog.open) privacyDialog.close();
         if (!requestDialog.open) requestDialog.showModal();
