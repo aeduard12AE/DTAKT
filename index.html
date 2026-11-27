@@ -13,6 +13,31 @@
     ad_user_data: 'denied',
     ad_personalization: 'denied'
   });
+  // Advertising measurement is optional; analytics and personalization stay disabled.
+  gtag('set', 'ads_data_redaction', true);
+  gtag('set', 'allow_ad_personalization_signals', false);
+  const dtaktConsentKey = 'dtakt-ad-consent-v1';
+  const dtaktConsentTTL = 180 * 24 * 60 * 60 * 1000;
+  function dtaktReadAdConsent() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(dtaktConsentKey));
+      if (saved && ['granted','denied'].includes(saved.choice) &&
+          Number.isFinite(saved.at) && saved.at <= Date.now() &&
+          Date.now() - saved.at < dtaktConsentTTL) return saved.choice;
+    } catch (_) {}
+    return null;
+  }
+  function dtaktUpdateAdConsent(choice) {
+    const state = choice === 'granted' ? 'granted' : 'denied';
+    gtag('consent', 'update', {
+      ad_storage: state,
+      ad_user_data: state,
+      analytics_storage: 'denied',
+      ad_personalization: 'denied'
+    });
+  }
+  const dtaktSavedConsent = dtaktReadAdConsent();
+  if (dtaktSavedConsent) dtaktUpdateAdConsent(dtaktSavedConsent);
   gtag('js', new Date());
 </script>
 <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-TSN9VT76"></script>
@@ -422,6 +447,17 @@ html[data-dtakt-view="partners"] #dtakt-partners,html[data-dtakt-view="portfolio
 .dtakt-sheet-controls button{white-space:nowrap}
 @media(max-width:520px){.dtakt-sheet-toolbar{padding:8px;gap:6px;flex-wrap:wrap}.dtakt-sheet-title{flex-basis:100%}.dtakt-sheet-controls{margin-left:auto}.dtakt-sheet-scroll{padding:4px}}
 
+/* Optional advertising measurement consent */
+.dtakt-cookie-banner[hidden]{display:none!important}
+.dtakt-cookie-banner{position:fixed;z-index:90;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));width:min(440px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;background:var(--paper);color:var(--ink);border:1px solid var(--hair);border-top:3px solid var(--red);border-radius:3px;box-shadow:0 10px 38px rgba(0,0,0,.17);padding:20px 22px;font:400 13px/1.55 var(--f-body)}
+.dtakt-cookie-banner h2{font:700 17px/1.3 var(--f-display);margin:0 0 8px}
+.dtakt-cookie-banner p{margin:0 0 10px;color:var(--ink-2)}
+.dtakt-cookie-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.dtakt-cookie-actions button{font:600 13px/1.3 var(--f-body);min-height:44px;padding:8px;border:1px solid var(--ink);border-radius:2px;background:var(--paper);color:var(--ink);cursor:pointer;white-space:normal}
+.dtakt-cookie-actions button:hover{background:var(--paper-2);border-color:var(--red-deep)}
+.dtakt-cookie-actions button:focus-visible,.dtakt-cookie-banner .privacy-link:focus-visible,.dtakt-cookie-settings:focus-visible{outline:2px solid var(--red-deep);outline-offset:3px}
+.dtakt-cookie-status{font-size:12px;color:var(--muted);margin-top:8px!important}
+@media(max-width:520px){.dtakt-cookie-banner{padding:15px 16px;bottom:max(10px,env(safe-area-inset-bottom));right:10px;width:calc(100% - 20px)}}
 </style>
 </head>
 <body>
@@ -764,6 +800,7 @@ html[data-dtakt-view="partners"] #dtakt-partners,html[data-dtakt-view="portfolio
 <span style="margin-left:auto">© 2026</span>
 <div class="legal-line" data-legal-identity="">D-TAKT — торговое наименование ИП Эдуард Арчибасов, Республика Армения · ИНН 28970807 · Рег. № 286.1628548.</div>
 <button class="footer-privacy" data-open-privacy="" type="button">Политика обработки персональных данных</button>
+<button class="footer-privacy dtakt-cookie-settings" data-cookie-ui id="dtakt-cookie-settings" type="button">Настройки cookie</button>
 <div class="legal-line" data-legal-line="">
       Информация на сайте предназначена для предварительного ознакомления и не является публичной офертой. Указанные цены являются стартовыми: сбор исходных данных и подготовка ТЗ — от 15 000 ₽, разработка проекта — от 70 000 ₽, интеграция KNX — от 25 000 ₽. Итоговая стоимость рассчитывается индивидуально по объёму и сложности работ, не может быть ниже указанной стартовой цены и согласуется до заключения договора. Оборудование и материалы покупает заказчик; монтаж и все подключения выполняет отдельный подрядчик заказчика по прямому договору.
     </div>
@@ -818,28 +855,38 @@ html[data-dtakt-view="partners"] #dtakt-partners,html[data-dtakt-view="portfolio
 <div class="dtakt-sheet-toolbar"><h2 class="dtakt-sheet-title" id="dtakt-sheet-title"></h2><div class="dtakt-sheet-controls"><button aria-label="Масштаб" aria-pressed="false" class="btn btn-ghost btn-sm" id="dtakt-sheet-zoom" type="button">＋ / −</button><button autofocus="" class="btn btn-sm" id="dtakt-sheet-close" type="button">Закрыть</button></div></div>
 <div class="dtakt-sheet-scroll"><img alt="" id="dtakt-sheet-image"/></div>
 </dialog>
+<aside aria-labelledby="dtakt-cookie-title" class="dtakt-cookie-banner" data-cookie-ui id="dtakt-cookie-banner" hidden>
+<h2 id="dtakt-cookie-title">Конфиденциальность и cookie</h2>
+<p id="dtakt-cookie-description"></p>
+<button class="privacy-link" data-open-privacy type="button" id="dtakt-cookie-policy">Политика конфиденциальности</button>
+<p class="dtakt-cookie-status" id="dtakt-cookie-status" hidden></p>
+<div class="dtakt-cookie-actions"><button type="button" id="dtakt-cookie-decline">Отклонить</button><button type="button" id="dtakt-cookie-accept">Разрешить измерение</button></div>
+</aside>
 <dialog aria-labelledby="privacy-dialog-title" class="privacy-dialog" id="privacy-dialog">
 <div class="privacy-dialog-frame" data-privacy-panel="">
 <div class="privacy-dialog-head"><h2 id="privacy-dialog-title">Обработка персональных данных</h2><button aria-label="Закрыть" class="privacy-close" data-close-privacy="" type="button">×</button></div>
 <div class="privacy-dialog-body">
 <div class="privacy-language" data-privacy-lang="ru" hidden="" lang="ru"><section class="privacy-part"><h3>Оператор</h3><p>Оператор данных — <strong>ИП Эдуард Евгеньевич Арчибасов</strong>, Республика Армения. Торговое наименование: <strong>D-TAKT</strong>. ИНН (ՀՎՀՀ): <strong>28970807</strong>. Номер госрегистрации: <strong>286.1628548</strong>. Место государственной регистрации: Ванадзор, Лорийская область, Армения. Для обращений: <a href="mailto:contact@d-takt.org">contact@d-takt.org</a>.</p></section>
 <section class="privacy-part"><h3>Какие сведения собираем</h3><p>При отправке заявки мы получаем ваше имя, адрес электронной почты, описание объекта и сведения, которые вы добровольно указываете в комментарии. Технические сведения, необходимые для работы и защиты сайта, могут обрабатываться его хостингом и сервисом формы.</p></section>
-<section class="privacy-part"><h3>Цель и основание</h3><p>Данные используются только для рассмотрения заявки, ответа на неё и дальнейшего общения по вашему запросу. Основание — ваше добровольное согласие при отправке формы. Данные не используются для рекламных рассылок без отдельного согласия.</p></section>
+<section class="privacy-part"><h3>Цель и основание</h3><p>Данные заявки используются только для рассмотрения заявки, ответа на неё и дальнейшего общения по вашему запросу. Основание — ваше добровольное согласие при отправке формы. Данные не используются для рекламных рассылок без отдельного согласия.</p></section>
 <section class="privacy-part"><h3>Передача и хранение</h3><p>Заявка обрабатывается Cloudflare Workers, проверка на спам выполняется Cloudflare Turnstile, а письма отправляются через Resend в почтовый ящик D-TAKT на Spacemail и на указанный вами email (подтверждение). GitHub Pages и указанные технические сервисы могут обрабатывать необходимые служебные сведения и данные, требуемые для их функций. Обработка может происходить за пределами Армении. D-TAKT хранит переписку не дольше необходимого для работы с обращением, если иной срок не требуется законом; поставщики услуг могут хранить данные в соответствии со своими правилами.</p></section>
 <section class="privacy-part"><h3>Ваши права</h3><p>Вы можете запросить сведения об обработке, исправление или удаление данных, а также отозвать согласие, написав на <a href="mailto:contact@d-takt.org">contact@d-takt.org</a>. После отзыва обработка прекращается, кроме случаев, когда её продолжение предусмотрено законом. Без имени и email мы не сможем ответить на заявку.</p></section>
-<section class="privacy-part"><h3>Дата обновления</h3><p>24 ноября 2026 года.</p></section></div>
+<section class="privacy-part"><h3>Cookie и измерение эффективности рекламы</h3><p>Сайт сохраняет выбранный язык, регион и настройки согласия в локальном хранилище браузера. Выбор рекламного согласия сохраняется на срок до 180 дней. Google Tag Manager и Google Ads используются для измерения эффективности рекламы и учёта отправленных заявок. При разрешении измерения Google может использовать рекламные cookie, идентификаторы рекламных переходов, технические сведения браузера и события конверсии, включая случайный идентификатор заявки для исключения повторного учёта. Персонализация рекламы и аналитическое хранилище отключены. До получения согласия и при отказе рекламные cookie не разрешены; Google может получать ограниченные технические сигналы без cookie для измерения и моделирования конверсий. Имя, email и содержание заявки не включаются в наше событие конверсии. Google может обрабатывать данные за пределами Армении. Подробнее: <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">Google</a>.</p><p style="margin-top:8px">Вы можете отказаться от рекламного измерения или изменить выбор в любое время через «Настройки cookie» внизу сайта. Это не влияет на возможность пользоваться сайтом и отправлять заявки.</p></section>
+<section class="privacy-part"><h3>Дата обновления</h3><p>27 ноября 2026 года.</p></section></div>
 <div class="privacy-language" data-privacy-lang="en" hidden="" lang="en"><section class="privacy-part"><h3>Data controller</h3><p>Data controller: <strong>sole proprietor Eduard Archibasov</strong>, Republic of Armenia. Trading name: <strong>D-TAKT</strong>. TIN: <strong>28970807</strong>. State registration No.: <strong>286.1628548</strong>. Place of registration: Vanadzor, Lori Province, Armenia. For privacy enquiries: <a href="mailto:contact@d-takt.org">contact@d-takt.org</a>.</p></section>
 <section class="privacy-part"><h3>Data we collect</h3><p>When you send an enquiry, we collect your name, email address, description of the property and any details you provide voluntarily. Hosting and form services may process necessary technical and security information.</p></section>
-<section class="privacy-part"><h3>Purpose and legal basis</h3><p>We use this information only to review and respond to your enquiry and to communicate about the work you requested. Our basis is your voluntary consent when submitting the form. We do not use these details for marketing without separate consent.</p></section>
+<section class="privacy-part"><h3>Purpose and legal basis</h3><p>We use enquiry information only to review and respond to your enquiry and to communicate about the work you requested. Our basis is your voluntary consent when submitting the form. We do not use these details for marketing without separate consent.</p></section>
 <section class="privacy-part"><h3>Processing and retention</h3><p>Cloudflare Workers processes the enquiry, Cloudflare Turnstile provides spam protection, and Resend sends email to the D-TAKT mailbox at Spacemail and a confirmation to your email address. GitHub Pages and these technical providers may process technical information and data needed for their functions. Processing may take place outside Armenia. D-TAKT keeps correspondence only as long as needed for the enquiry, unless the law requires longer retention; providers may retain data under their own policies.</p></section>
 <section class="privacy-part"><h3>Your rights</h3><p>You can request access, correction or deletion of your data or withdraw consent at <a href="mailto:contact@d-takt.org">contact@d-takt.org</a>. Processing will stop upon withdrawal unless the law requires otherwise. Without a name and email address we cannot reply.</p></section>
-<section class="privacy-part"><h3>Last updated</h3><p>24 November 2026.</p></section></div>
+<section class="privacy-part"><h3>Cookies and advertising measurement</h3><p>The website stores language, region and consent preferences in your browser’s local storage. Your advertising consent choice is stored for up to 180 days. Google Tag Manager and Google Ads are used to measure advertising performance and submitted enquiries. If you allow measurement, Google may use advertising cookies, ad-click identifiers, browser technical information and conversion events, including a random enquiry identifier to avoid duplicate counting. Ad personalization and analytics storage are disabled. Before consent and after refusal, advertising cookies are not permitted; Google may receive limited cookieless technical signals for measurement and conversion modeling. Our conversion event does not include your name, email or enquiry contents. Google may process data outside Armenia. More information: <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">Google</a>.</p><p style="margin-top:8px">You can decline advertising measurement or change your choice at any time using “Cookie settings” in the website footer. This does not affect your ability to use the site or submit an enquiry.</p></section>
+<section class="privacy-part"><h3>Last updated</h3><p>27 November 2026.</p></section></div>
 <div class="privacy-language" data-privacy-lang="hy" hidden="" lang="hy"><section class="privacy-part"><h3>Տվյալների մշակողը</h3><p>Տվյալների մշակող՝ <strong>ԱՁ ԱՐՉԻԲԱՍՈՎ ԷԴՈՒԱՐԴ ԵՎԳԵՆԻԻ</strong>, Հայաստանի Հանրապետություն։ Առևտրային անվանում՝ <strong>D-TAKT</strong>։ ՀՎՀՀ՝ <strong>28970807</strong>։ Պետական գրանցման համար՝ <strong>286.1628548</strong>։ Գրանցման վայր՝ Լոռու մարզ, Վանաձոր, Հայաստան։ Տվյալների մշակման վերաբերյալ հարցումների համար՝ <a href="mailto:contact@d-takt.org">contact@d-takt.org</a>։</p></section>
 <section class="privacy-part"><h3>Հավաքագրվող տվյալները</h3><p>Հարցում ուղարկելիս մենք ստանում ենք ձեր անունը, էլեկտրոնային հասցեն, տարածքի նկարագրությունը և մեկնաբանությունում կամավոր տրամադրած տեղեկությունները։ Հոսթինգի և ձևի ծառայությունները կարող են մշակել անհրաժեշտ տեխնիկական և անվտանգության տվյալներ։</p></section>
-<section class="privacy-part"><h3>Նպատակը և հիմքը</h3><p>Տվյալներն օգտագործվում են միայն ձեր հարցումը դիտարկելու, պատասխանելու և ձեր պահանջած աշխատանքների վերաբերյալ հաղորդակցվելու համար՝ ձևն ուղարկելիս տրված համաձայնության հիման վրա։ Առանց առանձին համաձայնության դրանք չեն օգտագործվում գովազդային հաղորդագրությունների համար։</p></section>
+<section class="privacy-part"><h3>Նպատակը և հիմքը</h3><p>Հարցման տվյալներն օգտագործվում են միայն ձեր հարցումը դիտարկելու, պատասխանելու և ձեր պահանջած աշխատանքների վերաբերյալ հաղորդակցվելու համար՝ ձևն ուղարկելիս տրված համաձայնության հիման վրա։ Առանց առանձին համաձայնության դրանք չեն օգտագործվում գովազդային հաղորդագրությունների համար։</p></section>
 <section class="privacy-part"><h3>Փոխանցում և պահպանում</h3><p>Հարցումը մշակվում է Cloudflare Workers-ի միջոցով, սպամից պաշտպանությունն ապահովում է Cloudflare Turnstile-ը, իսկ Resend-ը նամակ է ուղարկում D-TAKT-ի Spacemail փոստարկղ և հաստատում՝ ձեր նշած էլեկտրոնային հասցեին։ GitHub Pages-ը և նշված տեխնիկական ծառայությունները կարող են մշակել իրենց գործառույթների համար անհրաժեշտ տվյալները։ Մշակումը կարող է կատարվել Հայաստանի սահմաններից դուրս։ D-TAKT-ը նամակագրությունը պահպանում է միայն անհրաժեշտ ժամկետով, եթե օրենքով այլ ժամկետ սահմանված չէ։ Ծառայություններ մատուցողները կարող են տվյալներ պահպանել իրենց կանոններին համապատասխան։</p></section>
 <section class="privacy-part"><h3>Ձեր իրավունքները</h3><p>Կարող եք պահանջել տվյալների տրամադրում, ուղղում կամ ջնջում, ինչպես նաև հետ կանչել համաձայնությունը՝ գրելով <a href="mailto:contact@d-takt.org">contact@d-takt.org</a> հասցեին։ Համաձայնությունը հետ կանչելուց հետո մշակումը դադարեցվում է, եթե օրենքով այլ բան նախատեսված չէ։ Առանց անվան և էլեկտրոնային հասցեի հնարավոր չէ պատասխանել հարցմանը։</p></section>
-<section class="privacy-part"><h3>Թարմացվել է</h3><p>24 նոյեմբերի 2026 թ․։</p></section></div>
+<section class="privacy-part"><h3>Cookie ֆայլեր և գովազդի արդյունավետության չափում</h3><p>Կայքը ձեր դիտարկիչի տեղային պահոցում պահպանում է լեզվի, տարածաշրջանի և համաձայնության կարգավորումները։ Գովազդի չափման վերաբերյալ ձեր ընտրությունը պահպանվում է մինչև 180 օր։ Google Tag Manager-ը և Google Ads-ը կիրառվում են գովազդի արդյունավետությունը չափելու և ուղարկված հարցումները հաշվառելու համար։ Եթե թույլատրեք չափումը, Google-ը կարող է օգտագործել գովազդային cookie ֆայլեր, գովազդային անցումների նույնացուցիչներ, դիտարկիչի տեխնիկական տվյալներ և փոխարկման իրադարձություններ, այդ թվում՝ հարցման պատահական նույնացուցիչը՝ կրկնակի հաշվառումը բացառելու համար։ Գովազդի անհատականացումը և վերլուծական տվյալների պահպանումն անջատված են։ Մինչ համաձայնությունը և մերժման դեպքում գովազդային cookie ֆայլերը թույլատրված չեն, սակայն Google-ը կարող է ստանալ սահմանափակ տեխնիկական ազդանշաններ առանց cookie ֆայլերի՝ չափման և փոխարկումների մոդելավորման համար։ Մեր փոխարկման իրադարձությունը չի ներառում ձեր անունը, էլեկտրոնային հասցեն կամ հարցման բովանդակությունը։ Google-ը կարող է տվյալները մշակել Հայաստանից դուրս։ Մանրամասն՝ <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">Google</a>.</p><p style="margin-top:8px">Կարող եք հրաժարվել գովազդի չափումից կամ ցանկացած պահի փոխել ընտրությունը կայքի ներքևում գտնվող «Cookie կարգավորումներ» բաժնում։ Դա չի ազդում կայքից օգտվելու և հարցում ուղարկելու հնարավորության վրա։</p></section>
+<section class="privacy-part"><h3>Թարմացվել է</h3><p>27 նոյեմբերի 2026 թ․։</p></section></div>
 </div>
 <div class="privacy-dialog-foot"><button class="btn btn-sm" data-close-privacy="" type="button">Закрыть</button></div>
 </div>
@@ -967,7 +1014,7 @@ html[data-dtakt-view="partners"] #dtakt-partners,html[data-dtakt-view="portfolio
     acceptNode(node) {
       const parent = node.parentElement;
       if (!parent || ['SCRIPT','STYLE','NOSCRIPT'].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
-      if (parent.closest('[data-price-key],[data-legal-line],[data-privacy-panel],[data-request-ui],#request-submit,#form-status')) return NodeFilter.FILTER_REJECT;
+      if (parent.closest('[data-price-key],[data-legal-line],[data-privacy-panel],[data-request-ui],[data-cookie-ui],#request-submit,#form-status')) return NodeFilter.FILTER_REJECT;
       const trimmed = node.nodeValue.trim();
       return trimmed ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
     }
@@ -1094,6 +1141,59 @@ html[data-dtakt-view="partners"] #dtakt-partners,html[data-dtakt-view="portfolio
   privacyDialog.querySelectorAll('[data-close-privacy]').forEach(button => button.addEventListener('click', () => privacyDialog.close()));
   privacyDialog.addEventListener('click', event => { if (event.target === privacyDialog) privacyDialog.close(); });
 
+  // Cookie UI follows the existing website language and never blocks enquiries.
+  const cookieBanner = document.getElementById('dtakt-cookie-banner');
+  const cookieSettings = document.getElementById('dtakt-cookie-settings');
+  const cookieLabels = {
+    ru:{title:'Конфиденциальность и cookie',description:'Мы используем Google Ads для измерения эффективности рекламы. Вы можете разрешить или отклонить рекламные cookie. При отказе Google может получать ограниченные сигналы без cookie. Отправка заявки доступна в любом случае.',policy:'Политика конфиденциальности',settings:'Настройки cookie',accept:'Разрешить измерение',decline:'Отклонить',granted:'Текущий выбор: измерение разрешено.',denied:'Текущий выбор: измерение отклонено.'},
+    en:{title:'Privacy & Cookies',description:'We use Google Ads to measure advertising performance. You can allow or decline advertising cookies. If you decline, Google may receive limited cookieless signals. You can submit an enquiry either way.',policy:'Privacy Policy',settings:'Cookie settings',accept:'Allow measurement',decline:'Decline',granted:'Current choice: measurement allowed.',denied:'Current choice: measurement declined.'},
+    hy:{title:'Գաղտնիություն և cookie ֆայլեր',description:'Գովազդի արդյունավետությունը չափելու համար օգտագործում ենք Google Ads-ը։ Կարող եք թույլատրել կամ մերժել գովազդային cookie ֆայլերը։ Մերժման դեպքում Google-ը կարող է ստանալ սահմանափակ ազդանշաններ առանց cookie ֆայլերի։ Հարցում ուղարկելը հնարավոր է երկու դեպքում էլ։',policy:'Գաղտնիության քաղաքականություն',settings:'Cookie կարգավորումներ',accept:'Թույլատրել չափումը',decline:'Մերժել',granted:'Ընթացիկ ընտրություն՝ չափումը թույլատրված է։',denied:'Ընթացիկ ընտրություն՝ չափումը մերժված է։'}
+  };
+  let cookieChoice = dtaktSavedConsent;
+  function renderCookieUI() {
+    const copy = cookieLabels[currentLang];
+    for (const [id,key] of [['title','title'],['description','description'],['policy','policy'],['accept','accept'],['decline','decline']]) {
+      document.getElementById('dtakt-cookie-'+id).textContent = copy[key];
+    }
+    cookieSettings.textContent = copy.settings;
+    const status = document.getElementById('dtakt-cookie-status');
+    status.hidden = !cookieChoice;
+    status.textContent = cookieChoice ? copy[cookieChoice] : '';
+  }
+  function clearAdvertisingCookies() {
+    // Remove accessible first-party Google Ads linker cookies after refusal/withdrawal.
+    const names = document.cookie.split(';').map(v => v.trim().split('=')[0]).filter(n => /^_gcl(?:_|$)/.test(n));
+    for (const name of names) {
+      for (const domain of ['', '; domain='+location.hostname, '; domain=d-takt.org']) {
+        document.cookie = name+'=; Max-Age=0; path=/'+domain;
+      }
+    }
+  }
+  function chooseCookieConsent(choice) {
+    cookieChoice = choice;
+    dtaktUpdateAdConsent(choice);
+    if (choice === 'denied') clearAdvertisingCookies();
+    storageSet(dtaktConsentKey, JSON.stringify({choice,at:Date.now()}));
+    cookieBanner.hidden = true;
+    renderCookieUI();
+    if (cookieBanner.contains(document.activeElement)) cookieSettings.focus({preventScroll:true});
+  }
+  document.getElementById('dtakt-cookie-accept').addEventListener('click', () => chooseCookieConsent('granted'));
+  document.getElementById('dtakt-cookie-decline').addEventListener('click', () => chooseCookieConsent('denied'));
+  cookieSettings.addEventListener('click', () => {
+    renderCookieUI(); cookieBanner.hidden = false;
+    document.getElementById('dtakt-cookie-decline').focus({preventScroll:true});
+  });
+  window.addEventListener('storage', event => {
+    if (event.key !== dtaktConsentKey && event.key !== null) return;
+    cookieChoice = dtaktReadAdConsent();
+    dtaktUpdateAdConsent(cookieChoice);
+    if (cookieChoice !== 'granted') clearAdvertisingCookies();
+    cookieBanner.hidden = !!cookieChoice; renderCookieUI();
+  });
+  cookieBanner.hidden = !!cookieChoice;
+  renderCookieUI();
+
   const requestForm = document.getElementById('request-form');
   const requestSubmit = document.getElementById('request-submit');
   const formStatus = document.getElementById('form-status');
@@ -1207,7 +1307,7 @@ html[data-dtakt-view="partners"] #dtakt-partners,html[data-dtakt-view="portfolio
     }
   });
   // Keep modal language aligned if visitor switches language before opening it.
-  document.querySelectorAll('.lang-btn').forEach(button => button.addEventListener('click', () => { renderPrivacy(); renderRequestUI(); }));
+  document.querySelectorAll('.lang-btn').forEach(button => button.addEventListener('click', () => { renderPrivacy(); renderRequestUI(); renderCookieUI(); }));
   renderPrivacy();
   renderRequestUI();
 
